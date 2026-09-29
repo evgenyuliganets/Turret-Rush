@@ -6,6 +6,7 @@ namespace Turret_Rush.Scripts.Combat
     {
         [SerializeField] private float speed = 25f;
         [SerializeField] private float lifetime = 3f;
+        [SerializeField] private float damage = 25f;
 
         private void Start()
         {
@@ -16,6 +17,17 @@ namespace Turret_Rush.Scripts.Combat
         {
             transform.position +=
                 transform.forward * (speed * Time.deltaTime);
+        }
+
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.TryGetComponent<IDamageable>(out var damageable))
+            {
+                damageable.TakeDamage(damage);
+            }
+
+            Destroy(gameObject);
         }
     }
 }
