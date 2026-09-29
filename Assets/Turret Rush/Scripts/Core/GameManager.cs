@@ -1,3 +1,4 @@
+using Turret_Rush.Scripts.Combat;
 using Turret_Rush.Scripts.Player;
 using TurretRush.Input;
 using UnityEngine;
@@ -8,6 +9,7 @@ namespace Turret_Rush.Scripts.Core
     {
         [SerializeField] private PlayerInputReader inputReader;
         [SerializeField] private CarMovement carMovement;
+        [SerializeField] private Weapon weapon;
 
         private bool _isGameStarted;
 
@@ -28,6 +30,7 @@ namespace Turret_Rush.Scripts.Core
 
             _isGameStarted = true;
             carMovement.StartMoving();
+            weapon.StartFiring();
         }
     }
 }
