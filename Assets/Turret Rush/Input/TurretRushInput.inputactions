@@ -1,0 +1,57 @@
+{
+    "version": 1,
+    "name": "TurretRushInput",
+    "maps": [
+        {
+            "name": "Gameplay",
+            "id": "435496a4-daf7-4e05-8e29-f36fbcbbabf0",
+            "actions": [
+                {
+                    "name": "StartGame",
+                    "type": "Button",
+                    "id": "21047ed2-b351-427b-9827-4776aebb0300",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "AimPosition",
+                    "type": "Value",
+                    "id": "8f88f53a-34f9-4d01-8a37-95f028f4adeb",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true,
+                    "priority": 0
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "9f9e82eb-363f-4ba4-ad4c-a1e5888171fe",
+                    "path": "<Pointer>/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "StartGame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e342fdd1-a074-472f-9c14-1f8000233e83",
+                    "path": "<Pointer>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AimPosition",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
