@@ -1,43 +1,39 @@
-﻿using Turret_Rush.Scripts.Combat;
+﻿using System;
+using Turret_Rush.Scripts.Combat;
 using UnityEngine;
-using System;
-using System.Threading;
-using Cysharp.Threading.Tasks;
 
 namespace Turret_Rush.Scripts.Enemies
 {
     [RequireComponent(typeof(Health))]
-    public class EnemyController : MonoBehaviour
+    [RequireComponent(typeof(Rigidbody))]
+    public sealed class EnemyController : MonoBehaviour
     {
-        [SerializeField] private float detectionRange = 12f;
-        [SerializeField] private float attackRange = 1.5f;
-        [SerializeField] private float moveSpeed = 3f;
-        [SerializeField] private float rotationSpeed = 8f;
-
-        [SerializeField] private float attackDamage = 10f;
-        [SerializeField] private float attackInterval = 1f;
-
-        [SerializeField] private Transform debugTarget;
+        [SerializeField] private EnemyConfig enemyConfig;
+        [SerializeField] private EnemyAnimator enemyAnimator;
 
         private Health _health;
+        private Rigidbody _rigidbody;
+
         private Transform _target;
         private IDamageable _targetDamageable;
+        private Collider _targetCollider;
 
-        private CancellationTokenSource _attackCancellation;
+        private bool _hasCollidedWithCar;
 
-        public EnemyState State { get; private set; } = EnemyState.Idle;
-
+        public EnemyState State { get; private set; } =
+            EnemyState.Idle;
 
         private void Awake()
         {
             _health = GetComponent<Health>();
-        }
+            _rigidbody = GetComponent<Rigidbody>();
 
+            _health.Initialize(enemyConfig.MaxHealth);
+        }
 
         private void Start()
         {
-            if (debugTarget != null)
-                Initialize(debugTarget);
+            enemyAnimator.SetIdle();
         }
 
         private void OnEnable()
@@ -45,130 +41,255 @@ namespace Turret_Rush.Scripts.Enemies
             _health.Died += OnDied;
         }
 
-
         private void OnDisable()
         {
             _health.Died -= OnDied;
-            StopAttacking();
         }
 
         private void Update()
         {
-            if (_target is null || State == EnemyState.Dead)
+            if (_target is null)
                 return;
-
-            var distance = Vector3.Distance(transform.position, _target.position);
-
 
             switch (State)
             {
                 case EnemyState.Idle:
-                    if (distance <= detectionRange)
-                    {
-                        State = EnemyState.Chasing;
-                    }
-
+                    UpdateIdle();
                     break;
 
                 case EnemyState.Chasing:
-                    if (distance <= attackRange)
-                    {
-                        State = EnemyState.Attacking;
-                        StartAttacking();
-                        break;
-                    }
-
-                    ChaseTarget();
+                    UpdateChasing();
                     break;
 
                 case EnemyState.Attacking:
-                    if (distance > attackRange)
-                    {
-                        StopAttacking();
-                        State = EnemyState.Chasing;
-                    }
-
-                    break;
-                
+                case EnemyState.Dying:
                 case EnemyState.Dead:
-                    return;
+                    break;
 
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
 
-        private void OnDied()
+        private void FixedUpdate()
         {
-            State = EnemyState.Dead;
-            StopAttacking();
-            Destroy(gameObject);
+            if (_target is null ||
+                State != EnemyState.Chasing)
+                return;
+
+            ChaseTarget();
+        }
+
+        private void UpdateIdle()
+        {
+            float distance = Vector3.Distance(
+                _rigidbody.position,
+                _target.position
+            );
+
+            if (distance <= enemyConfig.DetectionRange)
+                SetState(EnemyState.Chasing);
+        }
+
+        private void UpdateChasing()
+        {
+            float distance = Vector3.Distance(
+                _rigidbody.position,
+                _target.position
+            );
+
+            if (distance <= enemyConfig.AttackRange)
+                StartAttack();
         }
 
         private void ChaseTarget()
         {
-            var targetPosition = _target.position;
-            targetPosition.y = transform.position.y;
+            Vector3 targetPosition = _target.position;
+            targetPosition.y = _rigidbody.position.y;
 
-            var direction =
-                targetPosition - transform.position;
+            Vector3 direction =
+                targetPosition - _rigidbody.position;
 
             if (direction.sqrMagnitude < 0.001f)
                 return;
 
-            var targetRotation =
+            Quaternion targetRotation =
                 Quaternion.LookRotation(direction);
 
-            transform.rotation = Quaternion.Slerp(
-                transform.rotation,
+            Quaternion nextRotation = Quaternion.Slerp(
+                _rigidbody.rotation,
                 targetRotation,
-                rotationSpeed * Time.deltaTime
+                enemyConfig.RotationSpeed *
+                Time.fixedDeltaTime
             );
 
-            transform.position = Vector3.MoveTowards(
-                transform.position,
+            Vector3 nextPosition = Vector3.MoveTowards(
+                _rigidbody.position,
                 targetPosition,
-                moveSpeed * Time.deltaTime
+                enemyConfig.MoveSpeed *
+                Time.fixedDeltaTime
+            );
+
+            _rigidbody.MoveRotation(nextRotation);
+            _rigidbody.MovePosition(nextPosition);
+        }
+
+        private void StartAttack()
+        {
+            if (State != EnemyState.Chasing)
+                return;
+
+            SetState(EnemyState.Attacking);
+        }
+
+        public void ApplyAttackDamage()
+        {
+            if (State != EnemyState.Attacking)
+                return;
+
+            _targetDamageable?.TakeDamage(
+                enemyConfig.AttackDamage
             );
         }
 
-
-        private void StartAttacking()
+        public void FinishAttack()
         {
-            if (_attackCancellation != null)
+            if (State != EnemyState.Attacking)
                 return;
 
-            _attackCancellation = new CancellationTokenSource();
-
-            AttackLoopAsync(
-                _attackCancellation.Token
-            ).Forget();
+            StartDying();
         }
 
-        private void StopAttacking()
+        private void OnCollisionEnter(Collision collision)
         {
-            if (_attackCancellation == null)
-                return;
-
-            _attackCancellation.Cancel();
-            _attackCancellation.Dispose();
-            _attackCancellation = null;
-        }
-
-        private async UniTask AttackLoopAsync(
-            CancellationToken cancellationToken)
-        {
-            while (!cancellationToken.IsCancellationRequested)
+            if (_target is null ||
+                State == EnemyState.Dead ||
+                _hasCollidedWithCar)
             {
-                _targetDamageable?.TakeDamage(attackDamage);
+                return;
+            }
 
-                await UniTask.Delay(
-                    TimeSpan.FromSeconds(attackInterval),
-                    cancellationToken: cancellationToken
+            if (collision.transform.root != _target.root)
+                return;
+
+            _hasCollidedWithCar = true;
+
+            float collisionDamage =
+                CalculateCollisionDamage(collision);
+
+            _targetDamageable?.TakeDamage(
+                collisionDamage
+            );
+
+            StopMovement();
+
+            // Якщо атака вже почалась,
+            // не перебиваємо її death animation.
+            if (State == EnemyState.Attacking)
+                return;
+
+            if (State == EnemyState.Dying)
+                return;
+
+            StartDying();
+        }
+
+        private float CalculateCollisionDamage(
+            Collision collision)
+        {
+            Vector3 contactPoint =
+                collision.GetContact(0).point;
+
+            Vector3 localContactPoint =
+                _target.InverseTransformPoint(
+                    contactPoint
                 );
+
+            Vector3 localColliderCenter =
+                _target.InverseTransformPoint(
+                    _targetCollider.bounds.center
+                );
+
+            bool hitFrontHalf =
+                localContactPoint.z >=
+                localColliderCenter.z;
+
+            return hitFrontHalf
+                ? enemyConfig.FrontCollisionDamage
+                : enemyConfig.RearCollisionDamage;
+        }
+
+        private void OnDied()
+        {
+            StartDying();
+        }
+
+        private void StartDying()
+        {
+            if (State is EnemyState.Dying
+                or EnemyState.Dead)
+            {
+                return;
+            }
+
+            SetState(EnemyState.Dying);
+        }
+
+        public void FinishDeath()
+        {
+            if (State == EnemyState.Dead)
+                return;
+
+            SetState(EnemyState.Dead);
+
+            Destroy(gameObject);
+        }
+
+        private void SetState(EnemyState newState)
+        {
+            if (State == newState)
+                return;
+
+            State = newState;
+
+            switch (newState)
+            {
+                case EnemyState.Idle:
+                    enemyAnimator.SetIdle();
+                    break;
+
+                case EnemyState.Chasing:
+                    enemyAnimator.SetRunning();
+                    break;
+
+                case EnemyState.Attacking:
+                    StopMovement();
+                    enemyAnimator.PlayAttack();
+                    break;
+
+                case EnemyState.Dying:
+                    StopMovement();
+                    enemyAnimator.PlayDeath();
+                    break;
+
+                case EnemyState.Dead:
+                    StopMovement();
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(
+                        nameof(newState),
+                        newState,
+                        null
+                    );
             }
         }
 
+        private void StopMovement()
+        {
+            _rigidbody.linearVelocity = Vector3.zero;
+            _rigidbody.angularVelocity = Vector3.zero;
+        }
 
         public void Initialize(Transform target)
         {
@@ -176,6 +297,23 @@ namespace Turret_Rush.Scripts.Enemies
 
             _targetDamageable =
                 target.GetComponent<IDamageable>();
+
+            _targetCollider =
+                target.GetComponent<Collider>();
+
+            if (_targetDamageable is null)
+            {
+                Debug.LogError(
+                    $"{target.name} has no IDamageable."
+                );
+            }
+
+            if (_targetCollider is null)
+            {
+                Debug.LogError(
+                    $"{target.name} has no Collider."
+                );
+            }
         }
     }
 }

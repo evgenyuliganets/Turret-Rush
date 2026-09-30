@@ -7,7 +7,8 @@ namespace Turret_Rush.Scripts.Combat
     {
         [SerializeField] private float maxHealth = 100f;
 
-        private float CurrentHealth { get; set; }
+        public float CurrentHealth { get; private set; }
+        public float MaxHealth => maxHealth;
 
         public event Action<float> HealthChanged;
         public event Action Died;
@@ -15,6 +16,14 @@ namespace Turret_Rush.Scripts.Combat
         private void Awake()
         {
             CurrentHealth = maxHealth;
+        }
+
+        public void Initialize(float newMaxHealth)
+        {
+            maxHealth = newMaxHealth;
+            CurrentHealth = newMaxHealth;
+
+            HealthChanged?.Invoke(CurrentHealth);
         }
 
         public void TakeDamage(float damage)
@@ -28,14 +37,17 @@ namespace Turret_Rush.Scripts.Combat
             );
 
             HealthChanged?.Invoke(CurrentHealth);
-            Debug.Log($"{gameObject.name} took {damage} damage. Current health: {CurrentHealth}");
 
+            Debug.Log(
+                $"{gameObject.name} took {damage} damage. " +
+                $"Current health: {CurrentHealth}"
+            );
 
-            if (CurrentHealth <= 0f)
-            {
-                Died?.Invoke();
-                Debug.Log($"{gameObject.name} has died.");
-            }
+            if (CurrentHealth > 0f)
+                return;
+
+            Debug.Log($"{gameObject.name} has died.");
+            Died?.Invoke();
         }
     }
 }

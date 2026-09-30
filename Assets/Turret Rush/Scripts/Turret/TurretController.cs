@@ -5,11 +5,16 @@ namespace Turret_Rush.Scripts.Turret
 {
     public sealed class TurretController : MonoBehaviour
     {
-        [SerializeField] private PlayerInputReader inputReader;
         [SerializeField] private Camera mainCamera;
         [SerializeField] private float rotationSpeed = 10f;
 
         private Plane _aimPlane;
+        private PlayerInputReader _inputReader;
+
+        public void Initialize(PlayerInputReader inputReader)
+        {
+            _inputReader = inputReader;
+        }
 
         private void Awake()
         {
@@ -21,7 +26,7 @@ namespace Turret_Rush.Scripts.Turret
 
         private void Update()
         {
-            Vector2 screenPosition = inputReader.AimPosition;
+            Vector2 screenPosition = _inputReader.AimPosition;
 
             Ray ray = mainCamera.ScreenPointToRay(screenPosition);
 

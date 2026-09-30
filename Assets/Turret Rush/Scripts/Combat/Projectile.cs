@@ -22,10 +22,21 @@ namespace Turret_Rush.Scripts.Combat
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent<IDamageable>(out var damageable))
+            Debug.Log($"Projectile hit: {other.name}");
+
+            IDamageable damageable =
+                other.GetComponentInParent<IDamageable>();
+
+            if (damageable == null)
             {
-                damageable.TakeDamage(damage);
+                Debug.Log($"No IDamageable on: {other.name}");
+                Destroy(gameObject);
+                return;
             }
+
+            Debug.Log($"Damage enemy: {other.name}");
+
+            damageable.TakeDamage(damage);
 
             Destroy(gameObject);
         }
