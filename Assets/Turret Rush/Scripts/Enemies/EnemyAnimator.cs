@@ -12,8 +12,8 @@ namespace Turret_Rush.Scripts.Enemies
         private static readonly int Attack =
             Animator.StringToHash("Attack");
 
-        private static readonly int Death =
-            Animator.StringToHash("Death");
+        private static readonly int AttackSpeed =
+            Animator.StringToHash("AttackSpeed");
 
         public void SetIdle()
         {
@@ -30,14 +30,10 @@ namespace Turret_Rush.Scripts.Enemies
             animator.SetFloat(Speed, 1f);
         }
 
-        public void PlayAttack()
+        public void PlayAttack(float speed = 1f)
         {
+            animator.SetFloat(AttackSpeed, speed);
             animator.SetTrigger(Attack);
-        }
-
-        public void PlayDeath()
-        {
-            animator.SetTrigger(Death);
         }
     }
 }

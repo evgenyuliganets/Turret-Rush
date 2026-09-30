@@ -1,24 +1,25 @@
 ﻿using System;
+using System.Collections;
 using Turret_Rush.Scripts.Combat;
 using UnityEngine;
 
 namespace Turret_Rush.Scripts.Enemies
 {
     [RequireComponent(typeof(Health))]
-    [RequireComponent(typeof(Rigidbody))]
     public sealed class EnemyController : MonoBehaviour
     {
         [SerializeField] private EnemyConfig enemyConfig;
+
+        [SerializeField] private EnemyMovement movement;
+
+        [SerializeField] private EnemyCombat combat;
+
         [SerializeField] private EnemyAnimator enemyAnimator;
 
+        [SerializeField] private ParticleSystem deathVfxPrefab;
+
         private Health _health;
-        private Rigidbody _rigidbody;
-
-        private Transform _target;
-        private IDamageable _targetDamageable;
-        private Collider _targetCollider;
-
-        private bool _hasCollidedWithCar;
+        private Collider _collider;
 
         public EnemyState State { get; private set; } =
             EnemyState.Idle;
@@ -26,39 +27,42 @@ namespace Turret_Rush.Scripts.Enemies
         private void Awake()
         {
             _health = GetComponent<Health>();
-            _rigidbody = GetComponent<Rigidbody>();
+            _collider = GetComponent<Collider>();
 
-            _health.Initialize(enemyConfig.MaxHealth);
-        }
-
-        private void Start()
-        {
-            enemyAnimator.SetIdle();
+            _health.Initialize(
+                enemyConfig.MaxHealth
+            );
         }
 
         private void OnEnable()
         {
             _health.Died += OnDied;
+            combat.CollidedWithCar += OnCollidedWithCar;
         }
 
         private void OnDisable()
         {
             _health.Died -= OnDied;
+            combat.CollidedWithCar -= OnCollidedWithCar;
         }
 
         private void Update()
         {
-            if (_target is null)
-                return;
-
             switch (State)
             {
                 case EnemyState.Idle:
-                    UpdateIdle();
+                    if (movement.IsTargetDetected)
+                        SetState(EnemyState.Chasing);
+
                     break;
 
                 case EnemyState.Chasing:
-                    UpdateChasing();
+                    if (combat.IsTargetInAttackRange &&
+                        combat.IsBehindTarget)
+                    {
+                        StartRearAttackDeath();
+                    }
+
                     break;
 
                 case EnemyState.Attacking:
@@ -71,75 +75,12 @@ namespace Turret_Rush.Scripts.Enemies
             }
         }
 
-        private void FixedUpdate()
+        public void Initialize(Transform target)
         {
-            if (_target is null ||
-                State != EnemyState.Chasing)
-                return;
+            movement.Initialize(target);
+            combat.Initialize(target);
 
-            ChaseTarget();
-        }
-
-        private void UpdateIdle()
-        {
-            float distance = Vector3.Distance(
-                _rigidbody.position,
-                _target.position
-            );
-
-            if (distance <= enemyConfig.DetectionRange)
-                SetState(EnemyState.Chasing);
-        }
-
-        private void UpdateChasing()
-        {
-            float distance = Vector3.Distance(
-                _rigidbody.position,
-                _target.position
-            );
-
-            if (distance <= enemyConfig.AttackRange)
-                StartAttack();
-        }
-
-        private void ChaseTarget()
-        {
-            Vector3 targetPosition = _target.position;
-            targetPosition.y = _rigidbody.position.y;
-
-            Vector3 direction =
-                targetPosition - _rigidbody.position;
-
-            if (direction.sqrMagnitude < 0.001f)
-                return;
-
-            Quaternion targetRotation =
-                Quaternion.LookRotation(direction);
-
-            Quaternion nextRotation = Quaternion.Slerp(
-                _rigidbody.rotation,
-                targetRotation,
-                enemyConfig.RotationSpeed *
-                Time.fixedDeltaTime
-            );
-
-            Vector3 nextPosition = Vector3.MoveTowards(
-                _rigidbody.position,
-                targetPosition,
-                enemyConfig.MoveSpeed *
-                Time.fixedDeltaTime
-            );
-
-            _rigidbody.MoveRotation(nextRotation);
-            _rigidbody.MovePosition(nextPosition);
-        }
-
-        private void StartAttack()
-        {
-            if (State != EnemyState.Chasing)
-                return;
-
-            SetState(EnemyState.Attacking);
+            movement.StartIdle();
         }
 
         public void ApplyAttackDamage()
@@ -147,9 +88,7 @@ namespace Turret_Rush.Scripts.Enemies
             if (State != EnemyState.Attacking)
                 return;
 
-            _targetDamageable?.TakeDamage(
-                enemyConfig.AttackDamage
-            );
+            combat.ApplyAttackDamage();
         }
 
         public void FinishAttack()
@@ -160,63 +99,15 @@ namespace Turret_Rush.Scripts.Enemies
             StartDying();
         }
 
-        private void OnCollisionEnter(Collision collision)
+        private void OnCollidedWithCar(bool hitFrontHalf)
         {
-            if (_target is null ||
-                State == EnemyState.Dead ||
-                _hasCollidedWithCar)
+            if (hitFrontHalf)
             {
+                StartDying();
                 return;
             }
 
-            if (collision.transform.root != _target.root)
-                return;
-
-            _hasCollidedWithCar = true;
-
-            float collisionDamage =
-                CalculateCollisionDamage(collision);
-
-            _targetDamageable?.TakeDamage(
-                collisionDamage
-            );
-
-            StopMovement();
-
-            // Якщо атака вже почалась,
-            // не перебиваємо її death animation.
-            if (State == EnemyState.Attacking)
-                return;
-
-            if (State == EnemyState.Dying)
-                return;
-
-            StartDying();
-        }
-
-        private float CalculateCollisionDamage(
-            Collision collision)
-        {
-            Vector3 contactPoint =
-                collision.GetContact(0).point;
-
-            Vector3 localContactPoint =
-                _target.InverseTransformPoint(
-                    contactPoint
-                );
-
-            Vector3 localColliderCenter =
-                _target.InverseTransformPoint(
-                    _targetCollider.bounds.center
-                );
-
-            bool hitFrontHalf =
-                localContactPoint.z >=
-                localColliderCenter.z;
-
-            return hitFrontHalf
-                ? enemyConfig.FrontCollisionDamage
-                : enemyConfig.RearCollisionDamage;
+            StartRearAttackDeath();
         }
 
         private void OnDied()
@@ -233,19 +124,20 @@ namespace Turret_Rush.Scripts.Enemies
             }
 
             SetState(EnemyState.Dying);
-        }
 
-        public void FinishDeath()
-        {
-            if (State == EnemyState.Dead)
-                return;
+            Instantiate(
+                deathVfxPrefab,
+                _collider.bounds.center,
+                Quaternion.identity
+            );
 
             SetState(EnemyState.Dead);
 
             Destroy(gameObject);
         }
 
-        private void SetState(EnemyState newState)
+        private void SetState(
+            EnemyState newState)
         {
             if (State == newState)
                 return;
@@ -255,25 +147,24 @@ namespace Turret_Rush.Scripts.Enemies
             switch (newState)
             {
                 case EnemyState.Idle:
-                    enemyAnimator.SetIdle();
+                    movement.StartIdle();
                     break;
 
                 case EnemyState.Chasing:
-                    enemyAnimator.SetRunning();
+                    movement.StartChasing();
                     break;
 
                 case EnemyState.Attacking:
-                    StopMovement();
-                    enemyAnimator.PlayAttack();
+                    movement.Stop();
+                    combat.BeginAttack();
+                    enemyAnimator.PlayAttack(
+                        enemyConfig.AttackAnimationSpeed
+                    );
                     break;
 
                 case EnemyState.Dying:
-                    StopMovement();
-                    enemyAnimator.PlayDeath();
-                    break;
-
                 case EnemyState.Dead:
-                    StopMovement();
+                    movement.Stop();
                     break;
 
                 default:
@@ -285,35 +176,49 @@ namespace Turret_Rush.Scripts.Enemies
             }
         }
 
-        private void StopMovement()
+
+        private void StartRearAttackDeath()
         {
-            _rigidbody.linearVelocity = Vector3.zero;
-            _rigidbody.angularVelocity = Vector3.zero;
+            if (State is EnemyState.Dying or EnemyState.Dead)
+                return;
+
+            SetState(EnemyState.Dying);
+
+            combat.BeginAttack();
+            combat.ApplyAttackDamage();
+
+            enemyAnimator.PlayAttack(
+                enemyConfig.AttackAnimationSpeed
+            );
+
+            StartCoroutine(
+                FinishRearAttackDeath()
+            );
         }
 
-        public void Initialize(Transform target)
+        private IEnumerator FinishRearAttackDeath()
         {
-            _target = target;
+            yield return new WaitForSeconds(
+                enemyConfig.RearHitAnimationDuration
+            );
 
-            _targetDamageable =
-                target.GetComponent<IDamageable>();
+            FinishDeath();
+        }
 
-            _targetCollider =
-                target.GetComponent<Collider>();
+        private void FinishDeath()
+        {
+            if (State == EnemyState.Dead)
+                return;
 
-            if (_targetDamageable is null)
-            {
-                Debug.LogError(
-                    $"{target.name} has no IDamageable."
-                );
-            }
+            Instantiate(
+                deathVfxPrefab,
+                _collider.bounds.center,
+                Quaternion.identity
+            );
 
-            if (_targetCollider is null)
-            {
-                Debug.LogError(
-                    $"{target.name} has no Collider."
-                );
-            }
+            SetState(EnemyState.Dead);
+
+            Destroy(gameObject);
         }
     }
 }

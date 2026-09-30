@@ -18,4 +18,12 @@ MonoBehaviour:
   <MoveSpeed>k__BackingField: 3
   <RotationSpeed>k__BackingField: 8
   <AttackDamage>k__BackingField: 10
-  <AttackInterval>k__BackingField: 1
+  <FrontCollisionDamage>k__BackingField: 10
+  <RearCollisionDamage>k__BackingField: 20
+  <IdleMoveSpeed>k__BackingField: 1
+  <IdleWanderRadius>k__BackingField: 2.5
+  <IdlePointReachedDistance>k__BackingField: 0.2
+  <IdleWaitMin>k__BackingField: 0.5
+  <IdleWaitMax>k__BackingField: 1.5
+  <RearHitAnimationDuration>k__BackingField: 0.25
+  <AttackAnimationSpeed>k__BackingField: 2.5

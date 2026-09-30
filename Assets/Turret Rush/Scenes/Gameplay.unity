@@ -965,9 +965,9 @@ MonoBehaviour:
   enemyPrefab: {fileID: 8045914595912675323, guid: 667571580c710d649a1ef1f5a5dcdc10, type: 3}
   target: {fileID: 1070378069}
   enemiesParent: {fileID: 370596457}
-  enemyCount: 50
-  minX: -20
-  maxX: 20
+  enemyCount: 100
+  minX: -10
+  maxX: 10
   minZ: 15
   maxZ: 280
 --- !u!114 &1527658996 stripped
