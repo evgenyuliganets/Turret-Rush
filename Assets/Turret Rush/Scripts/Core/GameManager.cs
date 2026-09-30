@@ -4,48 +4,85 @@ using Turret_Rush.Scripts.Player;
 using Turret_Rush.Scripts.Turret;
 using TurretRush.Input;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using VContainer;
 
 namespace Turret_Rush.Scripts.Core
 {
     public sealed class GameManager : MonoBehaviour
     {
-        [SerializeField] private PlayerInputReader inputReader;
-        [SerializeField] private CarMovement carMovement;
-        [SerializeField] private Weapon weapon;
-        [SerializeField] private Health carHealth;
+        private PlayerInputReader _inputReader;
+        private CarMovement _carMovement;
+        private Health _carHealth;
+        private Weapon _weapon;
 
-        [SerializeField] private CarController carController;
-
-        private void Awake()
-        {
-            carController.Initialize(inputReader);
-        }
-
-        public GameState State { get; private set; } = GameState.WaitingForStart;
+        public GameState State { get; private set; } =
+            GameState.WaitingForStart;
 
         public event Action<GameState> StateChanged;
 
-        private void OnEnable()
+        [Inject]
+        private void Construct(
+            PlayerInputReader inputReader,
+            CarMovement carMovement,
+            Health carHealth,
+            Weapon weapon)
         {
-            inputReader.StartGamePressed += OnStartGamePressed;
-            carHealth.Died += OnCarDied;
+            _inputReader = inputReader;
+            _carMovement = carMovement;
+            _carHealth = carHealth;
+            _weapon = weapon;
         }
 
-        private void OnDisable()
+        private void Start()
         {
-            inputReader.StartGamePressed -= OnStartGamePressed;
-            carHealth.Died -= OnCarDied;
+            _inputReader.StartGamePressed += OnStartGamePressed;
+            _carHealth.Died += OnCarDied;
+
+            if (!GameSession.StartImmediately)
+                return;
+
+            GameSession.StartImmediately = false;
+
+            StartGame();
+        }
+
+        private void OnDestroy()
+        {
+            if (_inputReader is not null)
+                _inputReader.StartGamePressed -= OnStartGamePressed;
+
+            if (_carHealth is not null)
+                _carHealth.Died -= OnCarDied;
         }
 
         private void OnStartGamePressed()
         {
-            if (State != GameState.WaitingForStart)
-                return;
+            switch (State)
+            {
+                case GameState.WaitingForStart:
+                    StartGame();
+                    break;
 
+                case GameState.Won:
+                case GameState.Lost:
+                    RestartGame();
+                    break;
+
+                case GameState.Playing:
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private void StartGame()
+        {
             SetState(GameState.Playing);
 
-            carMovement.StartMoving();
-            weapon.StartFiring();
+            _carMovement.StartMoving();
+            _weapon.StartFiring();
         }
 
         private void OnCarDied()
@@ -53,27 +90,42 @@ namespace Turret_Rush.Scripts.Core
             if (State != GameState.Playing)
                 return;
 
-            carMovement.StopMoving();
-            weapon.StopFiring();
-
-            SetState(GameState.Lost);
+            FinishGame(GameState.Lost);
         }
-
 
         public void Win()
         {
             if (State != GameState.Playing)
                 return;
 
-            carMovement.StopMoving();
-            weapon.StopFiring();
-
-            SetState(GameState.Won);
+            FinishGame(GameState.Won);
         }
 
+        private void FinishGame(GameState result)
+        {
+            _carMovement.StopMoving();
+            _weapon.StopFiring();
+
+            SetState(result);
+        }
+
+        private void RestartGame()
+        {
+            GameSession.StartImmediately = true;
+
+            Scene currentScene =
+                SceneManager.GetActiveScene();
+
+            SceneManager.LoadScene(
+                currentScene.buildIndex
+            );
+        }
 
         private void SetState(GameState state)
         {
+            if (State == state)
+                return;
+
             State = state;
             StateChanged?.Invoke(state);
         }

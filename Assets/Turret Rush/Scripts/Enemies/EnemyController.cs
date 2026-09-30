@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using Turret_Rush.Scripts.Combat;
 using UnityEngine;
 
@@ -191,16 +192,25 @@ namespace Turret_Rush.Scripts.Enemies
                 enemyConfig.AttackAnimationSpeed
             );
 
-            StartCoroutine(
-                FinishRearAttackDeath()
-            );
+            FinishRearAttackDeathAsync(
+                destroyCancellationToken
+            ).Forget();
         }
 
-        private IEnumerator FinishRearAttackDeath()
+        private async UniTask FinishRearAttackDeathAsync(
+            CancellationToken cancellationToken)
         {
-            yield return new WaitForSeconds(
-                enemyConfig.RearHitAnimationDuration
-            );
+            bool cancelled = await UniTask
+                .Delay(
+                    TimeSpan.FromSeconds(
+                        enemyConfig.RearHitAnimationDuration
+                    ),
+                    cancellationToken: cancellationToken
+                )
+                .SuppressCancellationThrow();
+
+            if (cancelled)
+                return;
 
             FinishDeath();
         }

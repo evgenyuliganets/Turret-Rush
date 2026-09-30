@@ -1,5 +1,6 @@
 using TurretRush.Input;
 using UnityEngine;
+using VContainer;
 
 namespace Turret_Rush.Scripts.Turret
 {
@@ -11,6 +12,7 @@ namespace Turret_Rush.Scripts.Turret
         private Plane _aimPlane;
         private PlayerInputReader _inputReader;
 
+        [Inject]
         public void Initialize(PlayerInputReader inputReader)
         {
             _inputReader = inputReader;

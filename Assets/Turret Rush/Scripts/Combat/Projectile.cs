@@ -1,44 +1,86 @@
+using System;
 using UnityEngine;
 
 namespace Turret_Rush.Scripts.Combat
 {
     public sealed class Projectile : MonoBehaviour
     {
-        [SerializeField] private float speed = 25f;
+        [SerializeField] private float speed = 20f;
+        [SerializeField] private float damage = 10f;
         [SerializeField] private float lifetime = 3f;
-        [SerializeField] private float damage = 25f;
+        [SerializeField] private TrailRenderer trailRenderer;
+        [SerializeField] private ParticleSystem impactVfxPrefab;
 
-        private void Start()
+        private Action<Projectile> _releaseAction;
+
+        private Vector3 _direction;
+        private float _remainingLifetime;
+
+        private bool _isActive;
+
+        public void Initialize(
+            Action<Projectile> releaseAction)
         {
-            Destroy(gameObject, lifetime);
+            _releaseAction = releaseAction;
+        }
+
+        public void Launch(Vector3 direction)
+        {
+            trailRenderer.Clear();
+            trailRenderer.emitting = true;
+
+            _direction = direction.normalized;
+            _remainingLifetime = lifetime;
+            _isActive = true;
         }
 
         private void Update()
         {
-            transform.position +=
-                transform.forward * (speed * Time.deltaTime);
-        }
+            if (!_isActive)
+                return;
 
+            transform.position +=
+                _direction * (speed * Time.deltaTime);
+
+            _remainingLifetime -= Time.deltaTime;
+
+            if (_remainingLifetime <= 0f)
+                Release();
+        }
 
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log($"Projectile hit: {other.name}");
+            if (!_isActive)
+                return;
 
             IDamageable damageable =
                 other.GetComponentInParent<IDamageable>();
 
-            if (damageable == null)
-            {
-                Debug.Log($"No IDamageable on: {other.name}");
-                Destroy(gameObject);
+            if (damageable is null)
                 return;
-            }
-
-            Debug.Log($"Damage enemy: {other.name}");
 
             damageable.TakeDamage(damage);
+            
+            Instantiate(
+                impactVfxPrefab,
+                transform.position,
+                Quaternion.identity
+            );
 
-            Destroy(gameObject);
+            Release();
+        }
+
+        private void Release()
+        {
+            if (!_isActive)
+                return;
+
+            _isActive = false;
+
+            trailRenderer.emitting = false;
+            trailRenderer.Clear();
+
+            _releaseAction?.Invoke(this);
         }
     }
 }

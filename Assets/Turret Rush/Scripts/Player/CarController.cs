@@ -1,6 +1,7 @@
 using Turret_Rush.Scripts.Turret;
 using TurretRush.Input;
 using UnityEngine;
+using VContainer;
 
 namespace Turret_Rush.Scripts.Player
 {
@@ -8,8 +9,8 @@ namespace Turret_Rush.Scripts.Player
     {
         [SerializeField] private TurretController turretController;
 
-        public void Initialize(
-            PlayerInputReader inputReader)
+        [Inject]
+        public void Initialize(PlayerInputReader inputReader)
         {
             turretController.Initialize(
                 inputReader
