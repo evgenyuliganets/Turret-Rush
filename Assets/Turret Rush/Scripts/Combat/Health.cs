@@ -28,7 +28,8 @@ namespace Turret_Rush.Scripts.Combat
             );
 
             HealthChanged?.Invoke(CurrentHealth);
-            
+            Debug.Log($"{gameObject.name} took {damage} damage. Current health: {CurrentHealth}");
+
 
             if (CurrentHealth <= 0f)
             {

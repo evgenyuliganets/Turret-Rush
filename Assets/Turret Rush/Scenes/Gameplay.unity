@@ -152,11 +152,48 @@ Transform:
   - {fileID: 534261717}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &61075350 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
+  m_PrefabInstance: {fileID: 787746211}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &61075351 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
   m_PrefabInstance: {fileID: 787746211}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &61075354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 61075350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3752d47c9c0f4f0fbf6e909c9bb4ae8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Turret_Rush.Scripts.Enemies.EnemyController
+  detectionRange: 12
+  attackRange: 1.5
+  moveSpeed: 3
+  rotationSpeed: 8
+  attackDamage: 10
+  attackInterval: 0.5
+  debugTarget: {fileID: 0}
+--- !u!114 &61075355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 61075350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8410231d8cd4cf458b65ecdc810866d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Turret_Rush.Scripts.Combat.Health
+  maxHealth: 100
 --- !u!1001 &303276950
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -385,63 +422,6 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!1001 &438635526
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1584088442}
-    m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.28622043
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.9581638
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 146.736
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_Name
-      value: Model
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
 --- !u!1001 &453165563
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -533,89 +513,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 100, y: 0, z: 75}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &487393833
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 487393837}
-  - component: {fileID: 487393836}
-  - component: {fileID: 487393835}
-  - component: {fileID: 487393834}
-  m_Layer: 0
-  m_Name: Enemy (4)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &487393834
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 487393833}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3752d47c9c0f4f0fbf6e909c9bb4ae8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Turret_Rush.Scripts.Combat.EnemyController
---- !u!136 &487393835
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 487393833}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.37960464
-  m_Height: 1.7815273
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.9129598, z: -0.011899173}
---- !u!114 &487393836
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 487393833}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8410231d8cd4cf458b65ecdc810866d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Turret_Rush.Scripts.Combat.Health
-  maxHealth: 100
---- !u!4 &487393837
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 487393833}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.75, y: 0.078, z: 8.345}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1160375565}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &534261716
 GameObject:
   m_ObjectHideFlags: 0
@@ -885,11 +782,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 100, y: 0, z: 75}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!4 &725765750 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-  m_PrefabInstance: {fileID: 1002207260}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &741030604
 GameObject:
   m_ObjectHideFlags: 0
@@ -941,7 +833,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.22
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
       propertyPath: m_LocalPosition.y
@@ -949,7 +841,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.93
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -986,7 +878,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 61075355}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 61075354}
   m_SourcePrefab: {fileID: 100100000, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
 --- !u!1001 &881506664
 PrefabInstance:
@@ -1079,63 +977,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 100, y: 0, z: 75}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1001 &1002207260
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 2011077783}
-    m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.28622043
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.9581638
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 146.736
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_Name
-      value: Model
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
 --- !u!1 &1070378065 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1622837127792943962, guid: 29c5c19786c89b04bb2682a47baf6451, type: 3}
@@ -1167,218 +1008,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Turret_Rush.Scripts.Combat.Health
   maxHealth: 300
---- !u!4 &1160375565 stripped
+--- !u!4 &1070378069 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-  m_PrefabInstance: {fileID: 1182819593}
+  m_CorrespondingSourceObject: {fileID: 10393731592060040, guid: 29c5c19786c89b04bb2682a47baf6451, type: 3}
+  m_PrefabInstance: {fileID: 828989836291714554}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &1182819593
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 487393837}
-    m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.28622043
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.9581638
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 146.736
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_Name
-      value: Model
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
 --- !u!4 &1326157808 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4548389965692684124, guid: e44e11ebcbee49d45a37a546d0947e6d, type: 3}
   m_PrefabInstance: {fileID: 2237549432492326536}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1411420731 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-  m_PrefabInstance: {fileID: 438635526}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1461302825
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1461302829}
-  - component: {fileID: 1461302828}
-  - component: {fileID: 1461302827}
-  - component: {fileID: 1461302826}
-  m_Layer: 0
-  m_Name: Enemy (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1461302826
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1461302825}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3752d47c9c0f4f0fbf6e909c9bb4ae8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Turret_Rush.Scripts.Combat.EnemyController
---- !u!136 &1461302827
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1461302825}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.37960464
-  m_Height: 1.7815273
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.9129598, z: -0.011899173}
---- !u!114 &1461302828
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1461302825}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8410231d8cd4cf458b65ecdc810866d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Turret_Rush.Scripts.Combat.Health
-  maxHealth: 100
---- !u!4 &1461302829
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1461302825}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.27, y: 0.078, z: 8.345}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1855028058}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1491108881
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1461302829}
-    m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.28622043
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.9581638
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 146.736
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-      propertyPath: m_Name
-      value: Model
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
 --- !u!1 &1527658993 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7011596172435470051, guid: 29c5c19786c89b04bb2682a47baf6451, type: 3}
@@ -1461,177 +1100,6 @@ MonoBehaviour:
   inputReader: {fileID: 534261718}
   carMovement: {fileID: 1070378067}
   weapon: {fileID: 1527658996}
---- !u!1 &1584088438
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1584088442}
-  - component: {fileID: 1584088441}
-  - component: {fileID: 1584088440}
-  - component: {fileID: 1584088439}
-  m_Layer: 0
-  m_Name: Enemy (2)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1584088439
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1584088438}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3752d47c9c0f4f0fbf6e909c9bb4ae8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Turret_Rush.Scripts.Combat.EnemyController
---- !u!136 &1584088440
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1584088438}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.37960464
-  m_Height: 1.7815273
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.9129598, z: -0.011899173}
---- !u!114 &1584088441
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1584088438}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8410231d8cd4cf458b65ecdc810866d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Turret_Rush.Scripts.Combat.Health
-  maxHealth: 100
---- !u!4 &1584088442
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1584088438}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.28, y: 0.078, z: 8.345}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1411420731}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1855028058 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3e2d630995264de4e9098eda16dbe1b8, type: 3}
-  m_PrefabInstance: {fileID: 1491108881}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &2011077779
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2011077783}
-  - component: {fileID: 2011077782}
-  - component: {fileID: 2011077781}
-  - component: {fileID: 2011077780}
-  m_Layer: 0
-  m_Name: Enemy (3)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2011077780
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2011077779}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3752d47c9c0f4f0fbf6e909c9bb4ae8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Turret_Rush.Scripts.Combat.EnemyController
---- !u!136 &2011077781
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2011077779}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.37960464
-  m_Height: 1.7815273
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.9129598, z: -0.011899173}
---- !u!114 &2011077782
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2011077779}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8410231d8cd4cf458b65ecdc810866d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Turret_Rush.Scripts.Combat.Health
-  maxHealth: 100
---- !u!4 &2011077783
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2011077779}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.58, y: 0.078, z: 8.345}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 725765750}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2077663230
 GameObject:
   m_ObjectHideFlags: 0
@@ -1715,6 +1183,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3752d47c9c0f4f0fbf6e909c9bb4ae8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Turret_Rush.Scripts.Combat.EnemyController
+  detectionRange: 12
+  attackRange: 1.5
+  moveSpeed: 3
+  rotationSpeed: 8
+  attackDamage: 10
+  attackInterval: 1
+  debugTarget: {fileID: 1070378069}
 --- !u!1001 &828989836291714554
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1853,7 +1328,3 @@ SceneRoots:
   - {fileID: 828989836291714554}
   - {fileID: 741030605}
   - {fileID: 2077663233}
-  - {fileID: 1461302829}
-  - {fileID: 1584088442}
-  - {fileID: 2011077783}
-  - {fileID: 487393837}
