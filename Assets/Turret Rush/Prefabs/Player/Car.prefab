@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 1082970619218062256}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 1}
+  m_LocalPosition: {x: 0, y: 2.3, z: 0.09}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 5091475041264448141}
   - component: {fileID: 4477822870772241245}
   - component: {fileID: 7206023552416307669}
+  - component: {fileID: 8548756885341023280}
   m_Layer: 0
   m_Name: Car
   m_TagString: Player
@@ -65,7 +66,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2161746793485794444}
   - {fileID: 9075224262463057940}
@@ -98,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8410231d8cd4cf458b65ecdc810866d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Turret_Rush.Scripts.Combat.Health
-  maxHealth: 300
+  maxHealth: 250
 --- !u!65 &4989685547499459850
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -118,8 +119,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.814776, y: 2.236451, z: 4.3098392}
-  m_Center: {x: 0.009745717, y: 1.1423012, z: -0.024863243}
+  m_Size: {x: 1.2655258, y: 1.4035403, z: 3.6960442}
+  m_Center: {x: -0.033845544, y: 0.72584575, z: 0.033549428}
 --- !u!54 &5091475041264448141
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -176,6 +177,25 @@ MonoBehaviour:
   randomOffset: 0.7
   spawnOffset: {x: 0, y: 1, z: -2.5}
   moveSpeed: 1
+--- !u!114 &8548756885341023280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1622837127792943962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfff6ba53c1ef314d9e14d66caafdcc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Turret_Rush.Scripts.Player.WheelsRotationScript
+  wheels:
+  - {fileID: 3406511646651681147}
+  - {fileID: 8280735995712645452}
+  - {fileID: 5718987524680107750}
+  - {fileID: 3490232777140847040}
+  rotationSpeed: 100
+  carMovement: {fileID: 5019341213639370378}
 --- !u!1 &3728290353786252394
 GameObject:
   m_ObjectHideFlags: 0
@@ -338,7 +358,7 @@ Transform:
   m_GameObject: {fileID: 4425759668765019981}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0067, y: 1.1788, z: 1.729}
+  m_LocalPosition: {x: -0.0067, y: 1.13, z: 1.729}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -371,7 +391,7 @@ Transform:
   m_GameObject: {fileID: 7011596172435470051}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.6111, z: -1.25}
+  m_LocalPosition: {x: 0, y: 0.56, z: -1.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -408,6 +428,8 @@ MonoBehaviour:
   projectilePrefab: {fileID: 1947728614949210983, guid: 40b9687f595581d4abb607a073dcfe55, type: 3}
   firePoint: {fileID: 7259403762209447812}
   fireRate: 5
+  projectilesParent: {fileID: 0}
+  vfxParent: {fileID: 0}
 --- !u!1001 &1840468374034979687
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -460,9 +482,25 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: b9767badfe9ebee4ca2b1a9c269bf561, type: 2}
+    - target: {fileID: -2965826073662530175, guid: 7bcae92721707a448941351f0f944365, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.4000003
+      objectReference: {fileID: 0}
+    - target: {fileID: -1485697770100870613, guid: 7bcae92721707a448941351f0f944365, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.39999998
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 7bcae92721707a448941351f0f944365, type: 3}
       propertyPath: m_Name
       value: Model
+      objectReference: {fileID: 0}
+    - target: {fileID: 3018929094207593127, guid: 7bcae92721707a448941351f0f944365, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.40000033
+      objectReference: {fileID: 0}
+    - target: {fileID: 3948799767036138012, guid: 7bcae92721707a448941351f0f944365, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -472,6 +510,26 @@ PrefabInstance:
 --- !u!4 &2161746793485794444 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7bcae92721707a448941351f0f944365, type: 3}
+  m_PrefabInstance: {fileID: 1840468374034979687}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3406511646651681147 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3948799767036138012, guid: 7bcae92721707a448941351f0f944365, type: 3}
+  m_PrefabInstance: {fileID: 1840468374034979687}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3490232777140847040 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3018929094207593127, guid: 7bcae92721707a448941351f0f944365, type: 3}
+  m_PrefabInstance: {fileID: 1840468374034979687}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5718987524680107750 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -2965826073662530175, guid: 7bcae92721707a448941351f0f944365, type: 3}
+  m_PrefabInstance: {fileID: 1840468374034979687}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8280735995712645452 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -1485697770100870613, guid: 7bcae92721707a448941351f0f944365, type: 3}
   m_PrefabInstance: {fileID: 1840468374034979687}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3942495162601778139
@@ -627,6 +685,14 @@ PrefabInstance:
     - target: {fileID: 4109261055228912872, guid: d1eb70e63218e474e83b28b50940ec77, type: 3}
       propertyPath: m_Name
       value: HealthBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 4330151688211939275, guid: d1eb70e63218e474e83b28b50940ec77, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8819038739675796211, guid: d1eb70e63218e474e83b28b50940ec77, type: 3}
+      propertyPath: m_Name
+      value: FillHealth
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

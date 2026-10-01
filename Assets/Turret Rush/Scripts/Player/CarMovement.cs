@@ -26,5 +26,7 @@ namespace Turret_Rush.Scripts.Player
             transform.position +=
                 transform.forward * (speed * Time.deltaTime);
         }
+        
+        public bool IsMoving => _isMoving;
     }
 }
