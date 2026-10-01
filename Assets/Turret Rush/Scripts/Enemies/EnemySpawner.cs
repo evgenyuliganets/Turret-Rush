@@ -1,4 +1,6 @@
+using Turret_Rush.Scripts.Core;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Turret_Rush.Scripts.Enemies
 {
@@ -16,10 +18,35 @@ namespace Turret_Rush.Scripts.Enemies
         [SerializeField] private float minZ = 15f;
         [SerializeField] private float maxZ = 280f;
 
+        [SerializeField] private GameManager gameManager;
+
+        [SerializeField] private float despawnDistanceBehind = 20f;
+
+        [SerializeField] private float cleanupInterval = 0.5f;
+
+        [SerializeField] private Transform vfxParent;
+
+        private readonly List<EnemyController> _spawnedEnemies = new();
+
+        private float _nextCleanupTime;
+
         private void Start()
         {
             SpawnEnemies();
         }
+
+
+        private void Update()
+        {
+            if (Time.time < _nextCleanupTime)
+                return;
+
+            _nextCleanupTime =
+                Time.time + cleanupInterval;
+
+            CleanupEnemiesBehindPlayer();
+        }
+
 
         private void SpawnEnemies()
         {
@@ -38,7 +65,41 @@ namespace Turret_Rush.Scripts.Enemies
                     enemiesParent
                 );
 
-                enemy.Initialize(target);
+                enemy.Initialize(
+                    target,
+                    gameManager,
+                    vfxParent
+                );
+
+                _spawnedEnemies.Add(enemy);
+            }
+        }
+
+
+        private void CleanupEnemiesBehindPlayer()
+        {
+            for (int i = _spawnedEnemies.Count - 1; i >= 0; i--)
+            {
+                EnemyController enemy =
+                    _spawnedEnemies[i];
+
+                if (!enemy)
+                {
+                    _spawnedEnemies.RemoveAt(i);
+                    continue;
+                }
+
+                Vector3 localPosition =
+                    target.InverseTransformPoint(
+                        enemy.transform.position
+                    );
+
+                if (localPosition.z >= -despawnDistanceBehind)
+                    continue;
+
+                Destroy(enemy.gameObject);
+
+                _spawnedEnemies.RemoveAt(i);
             }
         }
     }

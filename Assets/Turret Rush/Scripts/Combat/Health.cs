@@ -13,6 +13,8 @@ namespace Turret_Rush.Scripts.Combat
         public event Action<float> HealthChanged;
         public event Action Died;
 
+        public event Action<float> Damaged;
+
         private void Awake()
         {
             CurrentHealth = maxHealth;
@@ -31,23 +33,24 @@ namespace Turret_Rush.Scripts.Combat
             if (damage <= 0f || CurrentHealth <= 0f)
                 return;
 
+            float previousHealth = CurrentHealth;
+
             CurrentHealth = Mathf.Max(
-                CurrentHealth - damage,
-                0f
+                0f,
+                CurrentHealth - damage
             );
 
-            HealthChanged?.Invoke(CurrentHealth);
+            float actualDamage =
+                previousHealth - CurrentHealth;
 
-            Debug.Log(
-                $"{gameObject.name} took {damage} damage. " +
-                $"Current health: {CurrentHealth}"
+            Damaged?.Invoke(actualDamage);
+
+            HealthChanged?.Invoke(
+                CurrentHealth
             );
 
-            if (CurrentHealth > 0f)
-                return;
-
-            Debug.Log($"{gameObject.name} has died.");
-            Died?.Invoke();
+            if (CurrentHealth <= 0f)
+                Died?.Invoke();
         }
     }
 }

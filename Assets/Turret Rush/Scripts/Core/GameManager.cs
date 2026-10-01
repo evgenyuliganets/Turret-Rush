@@ -1,8 +1,7 @@
 using System;
 using Turret_Rush.Scripts.Combat;
+using Turret_Rush.Scripts.Input;
 using Turret_Rush.Scripts.Player;
-using Turret_Rush.Scripts.Turret;
-using TurretRush.Input;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using VContainer;
@@ -129,5 +128,9 @@ namespace Turret_Rush.Scripts.Core
             State = state;
             StateChanged?.Invoke(state);
         }
+
+
+        public bool IsPlaying =>
+            State == GameState.Playing;
     }
 }

@@ -16,12 +16,10 @@ namespace Turret_Rush.Scripts.Enemies
         [field: SerializeField] public float MoveSpeed { get; private set; } = 3f;
 
         [field: SerializeField] public float RotationSpeed { get; private set; } = 8f;
-
-        [field: SerializeField] public float AttackDamage { get; private set; } = 10f;
-
+        
         [field: SerializeField] public float FrontCollisionDamage { get; private set; } = 10f;
 
-        [field: SerializeField] public float RearCollisionDamage { get; private set; } = 20f;
+        [field: SerializeField] public float RearAttackDamage { get; private set; } = 20f;
 
         [field: SerializeField] public float IdleMoveSpeed { get; private set; } = 1f;
 

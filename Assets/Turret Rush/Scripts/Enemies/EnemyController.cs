@@ -2,6 +2,7 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Turret_Rush.Scripts.Combat;
+using Turret_Rush.Scripts.Core;
 using UnityEngine;
 
 namespace Turret_Rush.Scripts.Enemies
@@ -21,6 +22,9 @@ namespace Turret_Rush.Scripts.Enemies
 
         private Health _health;
         private Collider _collider;
+        private GameManager _gameManager;
+
+        private Transform _vfxParent;
 
         public EnemyState State { get; private set; } =
             EnemyState.Idle;
@@ -49,6 +53,9 @@ namespace Turret_Rush.Scripts.Enemies
 
         private void Update()
         {
+            if (!_gameManager.IsPlaying)
+                return;
+
             switch (State)
             {
                 case EnemyState.Idle:
@@ -66,7 +73,6 @@ namespace Turret_Rush.Scripts.Enemies
 
                     break;
 
-                case EnemyState.Attacking:
                 case EnemyState.Dying:
                 case EnemyState.Dead:
                     break;
@@ -76,35 +82,29 @@ namespace Turret_Rush.Scripts.Enemies
             }
         }
 
-        public void Initialize(Transform target)
+        public void Initialize(Transform target, GameManager gameManager, Transform vfxParent)
         {
-            movement.Initialize(target);
-            combat.Initialize(target);
+            movement.Initialize(target, enemyConfig);
+            combat.Initialize(target, enemyConfig);
+            _gameManager = gameManager;
+
+            _gameManager.StateChanged += OnGameStateChanged;
+
 
             movement.StartIdle();
         }
 
-        public void ApplyAttackDamage()
+        private void OnDestroy()
         {
-            if (State != EnemyState.Attacking)
-                return;
-
-            combat.ApplyAttackDamage();
-        }
-
-        public void FinishAttack()
-        {
-            if (State != EnemyState.Attacking)
-                return;
-
-            StartDying();
+            if (_gameManager is not null)
+                _gameManager.StateChanged -= OnGameStateChanged;
         }
 
         private void OnCollidedWithCar(bool hitFrontHalf)
         {
             if (hitFrontHalf)
             {
-                StartDying();
+                Die();
                 return;
             }
 
@@ -113,32 +113,10 @@ namespace Turret_Rush.Scripts.Enemies
 
         private void OnDied()
         {
-            StartDying();
+            Die();
         }
 
-        private void StartDying()
-        {
-            if (State is EnemyState.Dying
-                or EnemyState.Dead)
-            {
-                return;
-            }
-
-            SetState(EnemyState.Dying);
-
-            Instantiate(
-                deathVfxPrefab,
-                _collider.bounds.center,
-                Quaternion.identity
-            );
-
-            SetState(EnemyState.Dead);
-
-            Destroy(gameObject);
-        }
-
-        private void SetState(
-            EnemyState newState)
+        private void SetState(EnemyState newState)
         {
             if (State == newState)
                 return;
@@ -153,14 +131,6 @@ namespace Turret_Rush.Scripts.Enemies
 
                 case EnemyState.Chasing:
                     movement.StartChasing();
-                    break;
-
-                case EnemyState.Attacking:
-                    movement.Stop();
-                    combat.BeginAttack();
-                    enemyAnimator.PlayAttack(
-                        enemyConfig.AttackAnimationSpeed
-                    );
                     break;
 
                 case EnemyState.Dying:
@@ -185,7 +155,6 @@ namespace Turret_Rush.Scripts.Enemies
 
             SetState(EnemyState.Dying);
 
-            combat.BeginAttack();
             combat.ApplyAttackDamage();
 
             enemyAnimator.PlayAttack(
@@ -212,23 +181,36 @@ namespace Turret_Rush.Scripts.Enemies
             if (cancelled)
                 return;
 
-            FinishDeath();
+            Die();
         }
 
-        private void FinishDeath()
+        private void Die()
         {
             if (State == EnemyState.Dead)
                 return;
 
+            if (State != EnemyState.Dying)
+                SetState(EnemyState.Dying);
+
             Instantiate(
                 deathVfxPrefab,
                 _collider.bounds.center,
-                Quaternion.identity
+                Quaternion.identity,
+                _vfxParent
             );
 
             SetState(EnemyState.Dead);
 
             Destroy(gameObject);
+        }
+
+        private void OnGameStateChanged(
+            GameState gameState)
+        {
+            if (gameState != GameState.Playing)
+            {
+                SetState(EnemyState.Idle);
+            }
         }
     }
 }

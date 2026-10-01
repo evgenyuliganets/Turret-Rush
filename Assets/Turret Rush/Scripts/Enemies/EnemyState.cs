@@ -6,7 +6,6 @@ namespace Turret_Rush.Scripts.Enemies
     {
         Idle,
         Chasing,
-        Attacking,
         Dying,
         Dead
     }

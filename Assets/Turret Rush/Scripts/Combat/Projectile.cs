@@ -11,6 +11,9 @@ namespace Turret_Rush.Scripts.Combat
         [SerializeField] private TrailRenderer trailRenderer;
         [SerializeField] private ParticleSystem impactVfxPrefab;
 
+
+        private Transform _vfxParent;
+
         private Action<Projectile> _releaseAction;
 
         private Vector3 _direction;
@@ -19,9 +22,11 @@ namespace Turret_Rush.Scripts.Combat
         private bool _isActive;
 
         public void Initialize(
-            Action<Projectile> releaseAction)
+            Action<Projectile> releaseAction, Transform vfxParent)
         {
             _releaseAction = releaseAction;
+
+            _vfxParent = vfxParent;
         }
 
         public void Launch(Vector3 direction)
@@ -60,11 +65,12 @@ namespace Turret_Rush.Scripts.Combat
                 return;
 
             damageable.TakeDamage(damage);
-            
+
             Instantiate(
                 impactVfxPrefab,
                 transform.position,
-                Quaternion.identity
+                Quaternion.identity,
+                _vfxParent
             );
 
             Release();

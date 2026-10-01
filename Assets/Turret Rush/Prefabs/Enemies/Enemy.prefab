@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 34136898597965522}
   - component: {fileID: 7753348563593405561}
   - component: {fileID: 717024425350627159}
+  - component: {fileID: 8215641752734493221}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -73,9 +74,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.43941814
-  m_Height: 2.069798
+  m_Height: 2.010821
   m_Direction: 1
-  m_Center: {x: 0.00072752056, y: 0.98727715, z: 0.0013966687}
+  m_Center: {x: 0.00072752056, y: 1.0167655, z: 0.0013966687}
 --- !u!114 &8045914595912675323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,7 +146,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04bc00c95aad4af4b4c0378698bd7a60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Turret_Rush.Scripts.Enemies.EnemyCombat
-  enemyConfig: {fileID: 11400000, guid: 79bbe1be7ba18894780d03980ed41df4, type: 2}
 --- !u!114 &717024425350627159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,8 +158,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9ba73e4b35cc8e4092e539939b17e93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Turret_Rush.Scripts.Enemies.EnemyMovement
-  enemyConfig: {fileID: 11400000, guid: 79bbe1be7ba18894780d03980ed41df4, type: 2}
   enemyAnimator: {fileID: 34136898597965522}
+--- !u!114 &8215641752734493221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1303813716033709977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ffb2a1057874c4bbf4435fee790b883, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Turret_Rush.Scripts.Feedback.DamageNumberEmitter
+  damageNumberPrefab: {fileID: 7026192635140540079, guid: c8c7bf373f37d4041add794809c0e90e, type: 3}
+  randomOffset: 0.7
+  spawnOffset: {x: 0, y: 2, z: 0}
+  moveSpeed: 2
 --- !u!1001 &1261345472845002930
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -227,33 +242,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a439962c3b654d14ead4ac91143d0e56, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7444281495429949423}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a439962c3b654d14ead4ac91143d0e56, type: 3}
 --- !u!4 &1588515555290406745 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a439962c3b654d14ead4ac91143d0e56, type: 3}
   m_PrefabInstance: {fileID: 1261345472845002930}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2107784507958756835 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a439962c3b654d14ead4ac91143d0e56, type: 3}
-  m_PrefabInstance: {fileID: 1261345472845002930}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &7444281495429949423
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2107784507958756835}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed7bb2bf2da64cef9837dd3e4b0c3bd1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Turret_Rush.Scripts.Enemies.EnemyAnimationEvents
 --- !u!95 &4678015911527548195 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: a439962c3b654d14ead4ac91143d0e56, type: 3}

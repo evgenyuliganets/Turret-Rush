@@ -8,6 +8,8 @@ namespace Turret_Rush.Scripts.Combat
         [SerializeField] private Projectile projectilePrefab;
         [SerializeField] private Transform firePoint;
         [SerializeField] private float fireRate = 5f;
+        [SerializeField] private Transform projectilesParent;
+        [SerializeField] private Transform vfxParent;
 
         private ObjectPool<Projectile> _projectilePool;
 
@@ -70,11 +72,13 @@ namespace Turret_Rush.Scripts.Combat
 
         private Projectile CreateProjectile()
         {
-            Projectile projectile =
-                Instantiate(projectilePrefab);
+            Projectile projectile = Instantiate(
+                projectilePrefab,
+                projectilesParent
+            );
 
             projectile.Initialize(
-                ReleaseProjectile
+                ReleaseProjectile, vfxParent
             );
 
             return projectile;
@@ -97,7 +101,7 @@ namespace Turret_Rush.Scripts.Combat
         {
             Destroy(projectile.gameObject);
         }
-        
+
         private void ReleaseProjectile(
             Projectile projectile)
         {

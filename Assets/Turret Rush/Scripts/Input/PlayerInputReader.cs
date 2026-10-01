@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace TurretRush.Input
+namespace Turret_Rush.Scripts.Input
 {
     public sealed class PlayerInputReader : MonoBehaviour
     {

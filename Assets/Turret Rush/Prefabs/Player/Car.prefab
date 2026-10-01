@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 4989685547499459850}
   - component: {fileID: 5091475041264448141}
   - component: {fileID: 4477822870772241245}
+  - component: {fileID: 7206023552416307669}
   m_Layer: 0
   m_Name: Car
   m_TagString: Player
@@ -159,6 +160,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Turret_Rush.Scripts.Player.CarController
   turretController: {fileID: 4231394084275513718}
+--- !u!114 &7206023552416307669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1622837127792943962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ffb2a1057874c4bbf4435fee790b883, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Turret_Rush.Scripts.Feedback.DamageNumberEmitter
+  damageNumberPrefab: {fileID: 7026192635140540079, guid: c8c7bf373f37d4041add794809c0e90e, type: 3}
+  randomOffset: 0.7
+  spawnOffset: {x: 0, y: 1, z: -2.5}
+  moveSpeed: 1
 --- !u!1 &3728290353786252394
 GameObject:
   m_ObjectHideFlags: 0

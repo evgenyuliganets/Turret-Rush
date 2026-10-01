@@ -6,11 +6,12 @@ namespace Turret_Rush.Scripts.Enemies
     [RequireComponent(typeof(Rigidbody))]
     public sealed class EnemyMovement : MonoBehaviour
     {
-        [SerializeField] private EnemyConfig enemyConfig;
         [SerializeField] private EnemyAnimator enemyAnimator;
 
         private Rigidbody _rigidbody;
         private Transform _target;
+        private EnemyConfig _enemyConfig;
+
 
         private Vector3 _spawnPosition;
         private Vector3 _idleTargetPosition;
@@ -25,7 +26,7 @@ namespace Turret_Rush.Scripts.Enemies
             Vector3.Distance(
                 _rigidbody.position,
                 _target.position
-            ) <= enemyConfig.DetectionRange;
+            ) <= _enemyConfig.DetectionRange;
 
         private void Awake()
         {
@@ -45,7 +46,7 @@ namespace Turret_Rush.Scripts.Enemies
                     {
                         MoveTowards(
                             _target.position,
-                            enemyConfig.MoveSpeed
+                            _enemyConfig.MoveSpeed
                         );
                     }
 
@@ -56,9 +57,10 @@ namespace Turret_Rush.Scripts.Enemies
             }
         }
 
-        public void Initialize(Transform target)
+        public void Initialize(Transform target, EnemyConfig enemyConfig)
         {
             _target = target;
+            _enemyConfig = enemyConfig;
             _spawnPosition = _rigidbody.position;
         }
 
@@ -104,7 +106,7 @@ namespace Turret_Rush.Scripts.Enemies
                 _idleTargetPosition
             );
 
-            if (distance <= enemyConfig.IdlePointReachedDistance)
+            if (distance <= _enemyConfig.IdlePointReachedDistance)
             {
                 _isWandering = false;
 
@@ -118,7 +120,7 @@ namespace Turret_Rush.Scripts.Enemies
 
             MoveTowards(
                 _idleTargetPosition,
-                enemyConfig.IdleMoveSpeed
+                _enemyConfig.IdleMoveSpeed
             );
         }
 
@@ -126,7 +128,7 @@ namespace Turret_Rush.Scripts.Enemies
         {
             Vector2 randomPoint =
                 Random.insideUnitCircle *
-                enemyConfig.IdleWanderRadius;
+                _enemyConfig.IdleWanderRadius;
 
             _idleTargetPosition = new Vector3(
                 _spawnPosition.x + randomPoint.x,
@@ -144,8 +146,8 @@ namespace Turret_Rush.Scripts.Enemies
             _idleWaitUntil =
                 Time.time +
                 Random.Range(
-                    enemyConfig.IdleWaitMin,
-                    enemyConfig.IdleWaitMax
+                    _enemyConfig.IdleWaitMin,
+                    _enemyConfig.IdleWaitMax
                 );
         }
 
@@ -179,7 +181,7 @@ namespace Turret_Rush.Scripts.Enemies
                 Quaternion.Slerp(
                     _rigidbody.rotation,
                     targetRotation,
-                    enemyConfig.RotationSpeed *
+                    _enemyConfig.RotationSpeed *
                     Time.fixedDeltaTime
                 );
 

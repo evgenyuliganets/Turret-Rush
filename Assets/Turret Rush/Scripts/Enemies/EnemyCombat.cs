@@ -7,7 +7,7 @@ namespace Turret_Rush.Scripts.Enemies
     [RequireComponent(typeof(Rigidbody))]
     public sealed class EnemyCombat : MonoBehaviour
     {
-        [SerializeField] private EnemyConfig enemyConfig;
+        private EnemyConfig _enemyConfig;
 
         private Rigidbody _rigidbody;
 
@@ -15,7 +15,6 @@ namespace Turret_Rush.Scripts.Enemies
         private IDamageable _targetDamageable;
         private Collider _targetCollider;
 
-        private bool _attackDamageApplied;
         private bool _hasCollidedWithCar;
 
         public event Action<bool> CollidedWithCar;
@@ -41,7 +40,7 @@ namespace Turret_Rush.Scripts.Enemies
                 );
 
                 return distance <=
-                       enemyConfig.AttackRange;
+                       _enemyConfig.AttackRange;
             }
         }
 
@@ -50,9 +49,11 @@ namespace Turret_Rush.Scripts.Enemies
             _rigidbody = GetComponent<Rigidbody>();
         }
 
-        public void Initialize(Transform target)
+        public void Initialize(Transform target, EnemyConfig enemyConfig)
         {
             _target = target;
+
+            _enemyConfig = enemyConfig;
 
             _targetDamageable =
                 target.GetComponent<IDamageable>();
@@ -75,20 +76,11 @@ namespace Turret_Rush.Scripts.Enemies
             }
         }
 
-        public void BeginAttack()
-        {
-            _attackDamageApplied = false;
-        }
 
         public void ApplyAttackDamage()
         {
-            if (_attackDamageApplied)
-                return;
-
-            _attackDamageApplied = true;
-
             _targetDamageable?.TakeDamage(
-                enemyConfig.AttackDamage
+                _enemyConfig.RearAttackDamage
             );
         }
 
@@ -108,16 +100,17 @@ namespace Turret_Rush.Scripts.Enemies
             bool hitFrontHalf =
                 IsFrontHalfCollision(collision);
 
-            float damage = hitFrontHalf
-                ? enemyConfig.FrontCollisionDamage
-                : enemyConfig.RearCollisionDamage;
-
-            _targetDamageable?.TakeDamage(damage);
+            if (hitFrontHalf)
+            {
+                _targetDamageable?.TakeDamage(
+                    _enemyConfig.FrontCollisionDamage
+                );
+            }
 
             CollidedWithCar?.Invoke(hitFrontHalf);
         }
-        
-        
+
+
         private bool IsFrontHalfCollision(
             Collision collision)
         {
@@ -137,7 +130,7 @@ namespace Turret_Rush.Scripts.Enemies
             return localContactPoint.z >=
                    localColliderCenter.z;
         }
-        
+
         public bool IsBehindTarget
         {
             get
