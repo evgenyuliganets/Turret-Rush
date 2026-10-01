@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Turret_Rush.Scripts.Enemies.EnemyConfig
   <MaxHealth>k__BackingField: 50
   <DetectionRange>k__BackingField: 16
-  <AttackRange>k__BackingField: 1.5
-  <MoveSpeed>k__BackingField: 4.5
+  <AttackRange>k__BackingField: 0.7
+  <MoveSpeed>k__BackingField: 5.5
   <RotationSpeed>k__BackingField: 8
   <FrontCollisionDamage>k__BackingField: 10
   <RearAttackDamage>k__BackingField: 20

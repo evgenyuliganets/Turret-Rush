@@ -87,6 +87,7 @@ namespace Turret_Rush.Scripts.Enemies
             movement.Initialize(target, enemyConfig);
             combat.Initialize(target, enemyConfig);
             _gameManager = gameManager;
+            _vfxParent = vfxParent;
 
             _gameManager.StateChanged += OnGameStateChanged;
 
